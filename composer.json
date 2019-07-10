@@ -1,0 +1,20 @@
+{
+    "name": "troodi/laravel-auto-deploy",
+    "description": "Laravel auto deploy",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Troodi",
+            "email": "troodi@ya.ru"
+        }
+    ],
+    "extra": {
+    "laravel": {
+            "providers": [
+                "Troodi\\LaravelAutoDeployServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
