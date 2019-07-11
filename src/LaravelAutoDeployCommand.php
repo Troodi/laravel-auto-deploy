@@ -71,7 +71,7 @@ class LaravelAutoDeployCommand extends Command
           $process->mustRun();
           Log::channel('deploy')->info($process->getOutput());
           $this->line($process->getOutput());
-          if(Str::contains($process->getOutput(), ['Already up-to-date', 'Already up to-date'])){
+          if(Str::contains($process->getOutput(), ['Already up-to-date', 'Already up to-date', 'Already up to date', 'Already up-to date'])){
               Log::channel('deploy')->info('You have the latest version');
               $this->line('You have the latest version');
               return;
