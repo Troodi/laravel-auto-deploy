@@ -1,2 +1,5 @@
 <?
-Route::get('/deploy', 'Troodi\LaravelAutoDeploy\LaravelAutoDeployController@index');
+Route::post('/deploy', [
+   'uses' => 'Troodi\LaravelAutoDeploy\LaravelAutoDeployController@index',
+   'nocsrf' => true,
+]);
