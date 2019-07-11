@@ -50,27 +50,27 @@ class LaravelAutoDeployCommand extends Command
       }
       Log::channel('deploy')->info('Get latest commit');
       $this->line('Get latest commit');
-      // $process = new Process('cd '.base_path().' && git pull');
-      // $process->setTimeout(3600);
-      // try {
-      //     $process->mustRun();
-      //     Log::channel('deploy')->info($process->getOutput());
-      //     echo $process->getOutput();
-      //     if(Str::contains($process->getOutput(), 'Already up to date.')){
-      //         Log::channel('deploy')->info('You have the latest version');
-      //         $this->line('You have the latest version');
-      //         return;
-      //     }
-      // } catch (\Exception $exception) {
-      //     Log::channel('deploy')->error('An error occurred while executing the command "git".');
-      //     $this->line('An error occurred while executing the command "git".');
-      //     Log::channel('deploy')->error($exception->getMessage());
-      //     echo $exception->getMessage();
-      //     if($this->option('maintenance')){
-      //       Artisan::call('up');
-      //     }
-      //     return;
-      // }
+      $process = new Process('cd '.base_path().' && git pull');
+      $process->setTimeout(3600);
+      try {
+          $process->mustRun();
+          Log::channel('deploy')->info($process->getOutput());
+          $this->line($process->getOutput());
+          if(Str::contains($process->getOutput(), 'Already up to date.')){
+              Log::channel('deploy')->info('You have the latest version');
+              $this->line('You have the latest version');
+              return;
+          }
+      } catch (\Exception $exception) {
+          Log::channel('deploy')->error('An error occurred while executing the command "git".');
+          $this->line('An error occurred while executing the command "git".');
+          Log::channel('deploy')->error($exception->getMessage());
+          $this->line($exception->getMessage());
+          if($this->option('maintenance')){
+            Artisan::call('up');
+          }
+          return;
+      }
       Log::channel('deploy')->info('Update composer packages');
       $this->line('Update composer packages');
       if(!(new PhpExecutableFinder)->find()){
@@ -84,9 +84,9 @@ class LaravelAutoDeployCommand extends Command
       if(!File::isDirectory(base_path().'/.composer/cache')){
           File::makeDirectory(base_path().'/.composer/cache', 0755, true, true);
       }
-      $process = new Process('cd '.base_path().' && '.$php_bin.' composer.phar update');
+      $process = new Process('cd '.base_path().' && '.$php_bin.' '.base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar update');
       $process->setEnv([
-          'COMPOSER_HOME' => base_path().'/composer.phar',
+          'COMPOSER_HOME' => base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar',
           'COMPOSER_CACHE_DIR' => base_path().'/.composer/cache'
       ]);
       $process->setTimeout(3600);
