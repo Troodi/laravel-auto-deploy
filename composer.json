@@ -8,6 +8,11 @@
             "email": "troodi@ya.ru"
         }
     ],
+    "autoload": {
+      "psr-4": {
+        "Troodi\\": "src/"   
+      }
+    },
     "extra": {
     "laravel": {
             "providers": [
