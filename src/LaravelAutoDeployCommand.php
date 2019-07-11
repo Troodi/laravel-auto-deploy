@@ -93,14 +93,12 @@ class LaravelAutoDeployCommand extends Command
       try {
           $process->mustRun();
           Log::channel('deploy')->info($process->getOutput());
-          echo $process->getOutput();
-          Log::channel('deploy')->info($process->getOutput());
+          $this->line($process->getOutput());
       } catch (\Exception $exception) {
           Log::channel('deploy')->error('An error occurred while executing the command "composer".');
           $this->line('An error occurred while executing the command "composer".');
-          Log::channel('deploy')->info($process->getOutput());
           Log::channel('deploy')->error($exception->getMessage());
-          echo $exception->getMessage();
+          $this->line($exception->getMessage());
           if($this->option('maintenance')){
             Artisan::call('up');
           }
