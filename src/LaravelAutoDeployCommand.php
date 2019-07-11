@@ -74,6 +74,7 @@ class LaravelAutoDeployCommand extends Command
           if(Str::contains($process->getOutput(), ['Already up-to-date', 'Already up to-date', 'Already up to date', 'Already up-to date'])){
               Log::channel('deploy')->info('You have the latest version');
               $this->line('You have the latest version');
+              Log::channel('deploy')->info('--------------------------------------------------------------------');
               return;
           }
       } catch (\Exception $exception) {
@@ -84,6 +85,7 @@ class LaravelAutoDeployCommand extends Command
           if($this->option('maintenance')){
             Artisan::call('up');
           }
+          Log::channel('deploy')->info('--------------------------------------------------------------------');
           return;
       }
       Log::channel('deploy')->info('Update composer packages');
@@ -117,6 +119,7 @@ class LaravelAutoDeployCommand extends Command
           if($this->option('maintenance')){
             Artisan::call('up');
           }
+          Log::channel('deploy')->info('--------------------------------------------------------------------');
           return;
       }
       Log::channel('deploy')->info('Migrating');
