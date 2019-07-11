@@ -43,6 +43,21 @@ class LaravelAutoDeployCommand extends Command
      */
     public function handle()
     {
+	  $config_array = config('logging');
+      $default = config('logging')['default'];
+      $channel_array = $config_array['channels'];
+      $custom_channel_array = [
+          'deploy' => [
+              'driver' => 'daily',
+              'path' => storage_path('logs/deploy.log'),
+              'level' => 'debug',
+              'days' => 14,
+          ],
+      ];
+
+      $final_channel_array = array_merge($channel_array, $custom_channel_array);
+      $final_config_array = array_merge(["default" => $default], ["channels" => $final_channel_array]);
+      config()->set('logging', $final_config_array);
       Log::channel('deploy')->info('Deploying started');
       $this->line('Deploying started');
       if($this->option('maintenance')){
