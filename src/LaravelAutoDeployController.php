@@ -3,8 +3,7 @@
 namespace Troodi\LaravelAutoDeploy;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Artisan;
 
 class LaravelAutoDeployController extends Controller
