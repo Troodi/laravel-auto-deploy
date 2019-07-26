@@ -65,7 +65,7 @@ class LaravelAutoDeployCommand extends Command
       }
       Log::channel('deploy')->info('Get latest commit');
       $this->line('Get latest commit');
-      $process = new Process('cd '.base_path().' && git pull');
+      $process = new Process('cd '.base_path().' && git reset --hard && git pull');
       $process->setTimeout(3600);
       try {
           $process->mustRun();
