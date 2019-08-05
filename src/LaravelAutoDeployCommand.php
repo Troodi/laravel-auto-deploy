@@ -124,18 +124,42 @@ class LaravelAutoDeployCommand extends Command
       }
       Log::channel('deploy')->info('Migrating');
       $this->line('Migrating');
-      Artisan::call('migrate');
+      try{
+        Artisan::call('migrate');
+      } catch (\Exception $ex){
+        Log::channel('deploy')->error($ex->getMessage());
+      }
       Log::channel('deploy')->info('Generate storage link');
       $this->line('Generate storage link');
-      Artisan::call('storage:link');
+      try{
+        Artisan::call('storage:link');
+      } catch (\Exception $ex){
+        Log::channel('deploy')->error($ex->getMessage());
+      }
       Log::channel('deploy')->info('Clearing cache');
       $this->line('Clearing cache');
-      Artisan::call('view:clear');
-      Artisan::call('config:clear');
-      Artisan::call('route:clear');
+      try{
+        Artisan::call('view:clear');
+      } catch (\Exception $ex){
+        Log::channel('deploy')->error($ex->getMessage());
+      }
+      try{
+        Artisan::call('config:clear');
+      } catch (\Exception $ex){
+        Log::channel('deploy')->error($ex->getMessage());
+      }
+      try{
+        Artisan::call('route:clear');
+      } catch (\Exception $ex){
+        Log::channel('deploy')->error($ex->getMessage());
+      }
       Log::channel('deploy')->info('Restarting queue');
       $this->line('Restarting queue');
-      Artisan::call('queue:restart');
+      try{
+        Artisan::call('queue:restart');
+      } catch (\Exception $ex){
+        Log::channel('deploy')->error($ex->getMessage());
+      }
       if($this->option('maintenance')){
         Artisan::call('up');
       }
