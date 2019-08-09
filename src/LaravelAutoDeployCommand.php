@@ -126,7 +126,7 @@ class LaravelAutoDeployCommand extends Command
       Log::channel('deploy')->info('Migrating');
       $this->line('Migrating');
       try{
-        Artisan::call('migrate');
+        Artisan::call('migrate --force');
       } catch (\Exception $ex){
         Log::channel('deploy')->error($ex->getMessage());
       }
