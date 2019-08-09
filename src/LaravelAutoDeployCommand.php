@@ -43,6 +43,7 @@ class LaravelAutoDeployCommand extends Command
      */
     public function handle()
     {
+    define('STDIN',fopen("php://stdin","r"));
 	  $config_array = config('logging');
       $default = config('logging')['default'];
       $channel_array = $config_array['channels'];
