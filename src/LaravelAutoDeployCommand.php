@@ -91,7 +91,9 @@ class LaravelAutoDeployCommand extends Command
       }
       Log::channel('deploy')->info('Update composer packages');
       $this->line('Update composer packages');
-      if(!(new PhpExecutableFinder)->find()){
+      if(env('PHP_BIN')){
+      	$php_bin = env('PHP_BIN');
+      } elseif(!(new PhpExecutableFinder)->find()){
         $php_bin = env('PHP_BIN', '/opt/php73/bin/php');
       } else {
         $php_bin = (new PhpExecutableFinder)->find();
