@@ -89,42 +89,6 @@ class LaravelAutoDeployCommand extends Command
           Log::channel('deploy')->info('--------------------------------------------------------------------');
           return;
       }
-      Log::channel('deploy')->info('Update composer packages');
-      $this->line('Update composer packages');
-      if(env('PHP_BIN')){
-      	$php_bin = env('PHP_BIN');
-      } elseif(!(new PhpExecutableFinder)->find()){
-        $php_bin = env('PHP_BIN', '/opt/php73/bin/php');
-      } else {
-        $php_bin = (new PhpExecutableFinder)->find();
-      }
-      if(!File::isDirectory(base_path().'/.composer')){
-          File::makeDirectory(base_path().'/.composer', 0755, true, true);
-      }
-      if(!File::isDirectory(base_path().'/.composer/cache')){
-          File::makeDirectory(base_path().'/.composer/cache', 0755, true, true);
-      }
-      $process = new Process('cd '.base_path().' && '.$php_bin.' '.base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar update');
-      $process->setEnv([
-          'COMPOSER_HOME' => base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar',
-          'COMPOSER_CACHE_DIR' => base_path().'/.composer/cache'
-      ]);
-      $process->setTimeout(3600);
-      try {
-          $process->mustRun();
-          Log::channel('deploy')->info($process->getOutput());
-          $this->line($process->getOutput());
-      } catch (\Exception $exception) {
-          Log::channel('deploy')->error('An error occurred while executing the command "composer".');
-          $this->line('An error occurred while executing the command "composer".');
-          Log::channel('deploy')->error($exception->getMessage());
-          $this->line($exception->getMessage());
-          if($this->option('maintenance')){
-            Artisan::call('up');
-          }
-          Log::channel('deploy')->info('--------------------------------------------------------------------');
-          return;
-      }
       Log::channel('deploy')->info('Migrating');
       $this->line('Migrating');
       try{
@@ -165,6 +129,42 @@ class LaravelAutoDeployCommand extends Command
       }
       if($this->option('maintenance')){
         Artisan::call('up');
+      }
+      Log::channel('deploy')->info('Update composer packages');
+      $this->line('Update composer packages');
+      if(env('PHP_BIN')){
+      	$php_bin = env('PHP_BIN');
+      } elseif(!(new PhpExecutableFinder)->find()){
+        $php_bin = env('PHP_BIN', '/opt/php73/bin/php');
+      } else {
+        $php_bin = (new PhpExecutableFinder)->find();
+      }
+      if(!File::isDirectory(base_path().'/.composer')){
+          File::makeDirectory(base_path().'/.composer', 0755, true, true);
+      }
+      if(!File::isDirectory(base_path().'/.composer/cache')){
+          File::makeDirectory(base_path().'/.composer/cache', 0755, true, true);
+      }
+      $process = new Process('cd '.base_path().' && '.$php_bin.' '.base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar update');
+      $process->setEnv([
+          'COMPOSER_HOME' => base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar',
+          'COMPOSER_CACHE_DIR' => base_path().'/.composer/cache'
+      ]);
+      $process->setTimeout(3600);
+      try {
+          $process->mustRun();
+          Log::channel('deploy')->info($process->getOutput());
+          $this->line($process->getOutput());
+      } catch (\Exception $exception) {
+          Log::channel('deploy')->error('An error occurred while executing the command "composer".');
+          $this->line('An error occurred while executing the command "composer".');
+          Log::channel('deploy')->error($exception->getMessage());
+          $this->line($exception->getMessage());
+          if($this->option('maintenance')){
+            Artisan::call('up');
+          }
+          Log::channel('deploy')->info('--------------------------------------------------------------------');
+          return;
       }
       $this->line('Pulling completed successfully');
       Log::channel('deploy')->info('Pulling completed successfully');
