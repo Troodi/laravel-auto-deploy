@@ -66,7 +66,7 @@ class LaravelAutoDeployCommand extends Command
       }
       Log::channel('deploy')->info('Get latest commit');
       $this->line('Get latest commit');
-      $process = new Process([base_path(), 'git reset --hard && git pull']);
+      $process = Process::fromShellCommandline('cd '.base_path().' && git reset --hard && git pull');
       $process->setTimeout(3600);
       try {
           $process->mustRun();
@@ -145,7 +145,7 @@ class LaravelAutoDeployCommand extends Command
       if(!File::isDirectory(base_path().'/.composer/cache')){
           File::makeDirectory(base_path().'/.composer/cache', 0755, true, true);
       }
-      $process = new Process('cd '.base_path().' && '.$php_bin.' '.base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar update');
+      $process = Process::fromShellCommandline('cd '.base_path().' && '.$php_bin.' '.base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar update');
       $process->setEnv([
           'COMPOSER_HOME' => base_path().'/vendor/troodi/laravel-auto-deploy/src/composer.phar',
           'COMPOSER_CACHE_DIR' => base_path().'/.composer/cache'
