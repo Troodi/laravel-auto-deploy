@@ -1,8 +1,6 @@
 {
     "name": "troodi/laravel-auto-deploy",
-    "version": "v1.0.0",
     "description": "Laravel auto deploy",
-    "version": "1.0.0",
     "authors": [
         {
             "name": "Troodi",
